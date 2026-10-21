@@ -1,0 +1,6 @@
+.build/
+build/
+.swiftpm/
+.DS_Store
+# Upstream weights (ConwayResearch/Underdog-Bark-3.0-Clean); the app downloads the Core ML build instead.
+model.bark
