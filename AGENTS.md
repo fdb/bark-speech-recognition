@@ -5,6 +5,7 @@ Menu bar app: hold right ⌥ to record, release to transcribe with Underdog Bark
 - Git: commit straight to `main`; no deploy step.
 - Build: `./build.sh` → `build/Bark.app`, signed with the Developer ID identity so Accessibility stays granted across rebuilds.
 - Verify: `say -o /tmp/t.wav --data-format=LEI16@16000 "Um, we should meet on Thursday." && build/Bark.app/Contents/MacOS/Bark --transcribe /tmp/t.wav` prints the sentence without "Um".
+- Release: bump `CFBundleShortVersionString` in `Resources/Info.plist`, `./build.sh`, zip with `ditto -c -k --keepParent build/Bark.app build/Bark-X.Y.Z.zip`, `xcrun notarytool submit … --keychain-profile bark-notary --wait`, `xcrun stapler staple build/Bark.app`, zip again, `gh release create vX.Y.Z`.
 - Runtime: FluidAudio 0.17.7, `AsrModels.loadLocal(version: .ultra)` on the `bark-3.0-clean` folder of FluidInference/bark-3.0-coreml, pinned to commit ca21bed2. Files and sizes are listed in `ModelStore.swift`. Model lives in `~/Library/Application Support/Bark/`.
 - When FluidAudio PR #1054 is released, `.bark3Clean` replaces the manual download and the `<unk>` stripping in `Transcriber.swift`.
 - `model.bark` in the repo root is the upstream entropy-coded file (identical to ConwayResearch/Underdog-Bark-3.0-Clean); the app does not read it.
