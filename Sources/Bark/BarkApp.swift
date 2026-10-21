@@ -7,7 +7,11 @@ struct BarkApp: App {
         MenuBarExtra {
             MenuContent(state: state)
         } label: {
-            Image(systemName: menuIcon)
+            if state.activity == .idle, state.isReady, let dog = Self.menuBarDog {
+                Image(nsImage: dog)
+            } else {
+                Image(systemName: menuIcon)
+            }
         }
 
         Window("Set Up Bark", id: "setup") {
@@ -17,6 +21,13 @@ struct BarkApp: App {
         .windowStyle(.hiddenTitleBar)
         .defaultLaunchBehavior(state.setupComplete ? .suppressed : .presented)
     }
+
+    /// The dog from artwork/bark-menubar.svg, as a template image so macOS tints it for the menu bar.
+    private static let menuBarDog: NSImage? = {
+        guard let image = NSImage(named: "MenuBarIcon") else { return nil }
+        image.isTemplate = true
+        return image
+    }()
 
     private var menuIcon: String {
         switch state.activity {

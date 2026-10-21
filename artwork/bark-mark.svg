@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- The Bark mark on a transparent canvas: dog in profile, ear, eye, two bark stripes.
+       Same coordinates as bark-app-icon.svg, which adds the tile and finish. -->
+  <path fill="#FFF3DF" d="M421 854
+    C352 850 300 829 273 791
+    C247 755 237 701 245 653
+    C250 615 268 582 292 552
+    L300 420
+    C312 330 369 268 441 270
+    C495 271 534 293 570 331
+    C592 354 611 369 646 370
+    L727 371
+    C746 371 756 384 751 404
+    C740 450 706 482 660 500
+    L594 526
+    C566 537 546 558 541 589
+    C533 635 550 680 574 726
+    C596 767 608 811 609 854 Z"/>
+  <path fill="#FF7465" d="M354 304
+    C326 298 299 318 276 351
+    C244 397 214 447 197 493
+    C180 540 193 582 228 606
+    C263 631 308 624 337 594
+    C358 573 365 542 371 507
+    L394 365
+    C399 333 382 310 354 304 Z"/>
+  <circle cx="464" cy="387" r="30" fill="#10264A"/>
+  <rect x="680" y="516" width="58" height="145" rx="29" fill="#FF7465"/>
+  <rect x="775" y="432" width="58" height="230" rx="29" fill="#FF7465"/>
+</svg>
