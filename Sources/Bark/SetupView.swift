@@ -200,7 +200,7 @@ struct SetupView: View {
         case .preparing:
             HStack(spacing: 10) {
                 ProgressView().controlSize(.small)
-                Text("Preparing for the Neural Engine…").foregroundStyle(.secondary)
+                Text("Preparing for the Neural Engine. The first launch takes about 1.5 minutes.").foregroundStyle(.secondary)
             }
         case .ready:
             Label("Model ready", systemImage: "checkmark.circle.fill").foregroundStyle(.green)

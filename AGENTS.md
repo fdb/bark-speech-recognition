@@ -10,6 +10,6 @@ Menu bar app: hold right ⌥ to record, release to transcribe with Underdog Bark
 - Runtime: FluidAudio 0.17.7, `AsrModels.loadLocal(version: .ultra)` on the `bark-3.0-clean` folder of FluidInference/bark-3.0-coreml, pinned to commit ca21bed2. Files and sizes are listed in `ModelStore.swift`. Model lives in `~/Library/Application Support/Bark/`.
 - When FluidAudio PR #1054 is released, `.bark3Clean` replaces the manual download and the `<unk>` stripping in `Transcriber.swift`.
 - `model.bark` in the repo root is the upstream entropy-coded file (identical to ConwayResearch/Underdog-Bark-3.0-Clean); the app does not read it.
-- First load per app bundle compiles the encoder for the Neural Engine (~75 s); later loads take ~0.2 s.
+- First load per app bundle compiles the encoder for the Neural Engine (~85 s, done by the system ANE compiler so Bark itself looks idle); later loads take ~0.2 s. The compiled cache is `~/Library/Caches/be.debleser.Bark/com.apple.e5rt.e5bundlecache/<OS build>/`; move its entries aside to reproduce a cold start.
 - Hotkey: listen-only CGEventTap, keycode 61 with device flag 0x40. A keyDown while held cancels (⌥ is a typing modifier).
 - Insertion: pasteboard + synthetic ⌘V, previous clipboard restored after 0.5 s.

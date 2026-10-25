@@ -33,7 +33,10 @@ struct BarkApp: App {
         switch state.activity {
         case .recording: return "mic.fill"
         case .transcribing: return "ellipsis.circle"
-        case .idle: return state.isReady ? "waveform" : "exclamationmark.triangle"
+        case .idle:
+            if state.isReady { return "waveform" }
+            if state.model == .downloading || state.model == .preparing { return "hourglass" }
+            return "exclamationmark.triangle"
         }
     }
 }
@@ -67,7 +70,7 @@ private struct MenuContent: View {
         switch state.model {
         case .missing: return "Speech model not downloaded"
         case .downloading: return "Downloading speech model…"
-        case .preparing: return "Preparing speech model…"
+        case .preparing: return "Preparing speech model (first launch takes about 1.5 min)…"
         case .failed: return "Speech model failed to load"
         case .ready: return "Ready: hold right ⌥ to dictate"
         }
