@@ -25,8 +25,10 @@ enum Inserter {
         let source = CGEventSource(stateID: .combinedSessionState)
         let down = CGEvent(keyboardEventSource: source, virtualKey: vKeyCode, keyDown: true)
         let up = CGEvent(keyboardEventSource: source, virtualKey: vKeyCode, keyDown: false)
-        down?.flags = .maskCommand
-        up?.flags = .maskCommand
+        for event in [down, up] {
+            event?.flags = .maskCommand
+            event?.setIntegerValueField(.eventSourceUserData, value: Hotkey.ownEventTag)
+        }
         down?.post(tap: .cghidEventTap)
         up?.post(tap: .cghidEventTap)
 

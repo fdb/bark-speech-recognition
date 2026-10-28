@@ -61,6 +61,9 @@ final class AppState {
     private var recordingStart = Date()
     private var cancelled = false
     private var pollTimer: Timer?
+    /// The app that received the last paste, while nothing was typed or clicked since.
+    /// The next transcript into that app continues the same text and needs a separating space.
+    private var continuationTarget: pid_t?
 
     init() {
         setupComplete = UserDefaults.standard.bool(forKey: "setupComplete")
@@ -71,6 +74,7 @@ final class AppState {
         hotkey.onPress = { [weak self] in MainActor.assumeIsolated { self?.beginRecording() } }
         hotkey.onRelease = { [weak self] in MainActor.assumeIsolated { self?.endRecording() } }
         hotkey.onChord = { [weak self] in MainActor.assumeIsolated { self?.cancelRecording() } }
+        hotkey.onInput = { [weak self] in MainActor.assumeIsolated { self?.continuationTarget = nil } }
 
         // Permission changes happen in System Settings, so poll for them.
         pollTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
@@ -200,7 +204,10 @@ final class AppState {
                 let text = try await transcriber.transcribe(samples)
                 guard !text.isEmpty else { return }
                 lastTranscript = text
-                Inserter.paste(text)
+                let target = NSWorkspace.shared.frontmostApplication?.processIdentifier
+                let continues = target != nil && target == continuationTarget
+                Inserter.paste(continues ? " " + text : text)
+                continuationTarget = target
             } catch {
                 lastError = error.localizedDescription
             }

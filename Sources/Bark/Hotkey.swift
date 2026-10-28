@@ -8,6 +8,11 @@ final class Hotkey {
     var onRelease: () -> Void = {}
     /// Another key was pressed while right Option was down (e.g. ⌥E for an accent): not dictation.
     var onChord: () -> Void = {}
+    /// The user typed or clicked: the cursor may have moved since the last paste.
+    var onInput: () -> Void = {}
+
+    /// Marks events Bark posts itself (the ⌘V of a paste) so the tap ignores them.
+    static let ownEventTag: Int64 = 0x4241524B  // "BARK"
 
     private static let rightOptionKeyCode: Int64 = 61
     private static let rightOptionDeviceMask: UInt64 = 0x40  // NX_DEVICERALTKEYMASK
@@ -19,7 +24,8 @@ final class Hotkey {
 
     func start() -> Bool {
         if tap != nil { return true }
-        let mask = (1 << CGEventType.flagsChanged.rawValue) | (1 << CGEventType.keyDown.rawValue)
+        let mask = [CGEventType.flagsChanged, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
+            .reduce(0) { $0 | (1 << $1.rawValue) }
         guard
             let tap = CGEvent.tapCreate(
                 tap: .cgSessionEventTap, place: .headInsertEventTap, options: .listenOnly,
@@ -53,7 +59,11 @@ final class Hotkey {
                 onRelease()
             }
         case .keyDown:
+            guard event.getIntegerValueField(.eventSourceUserData) != Self.ownEventTag else { return }
             if isDown { onChord() }
+            onInput()
+        case .leftMouseDown, .rightMouseDown, .otherMouseDown:
+            onInput()
         default:
             break
         }
